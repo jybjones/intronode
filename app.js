@@ -1,16 +1,24 @@
 #!/usr/bin/env node
 
-var argv = require('yargs')
-  // .default('name', 'World')
-  .argv;
+var argv = require('yargs').argv;
 var prompt = require('prompt');
 /////import the help.js file here, in essence help becomes the function//
 var help = require('./app/help');
+var zipFile = require('./app/zipfile');
+var csvToJson = require('/.app/csvToJson');
+
+var fs = require('fs');
 
 if (argv.help){
   help();
-  // help.printHelpMessage();
-  // process.exit(1);
+}
+
+if (argv.file) {
+  zipFile(argv.file);
+}
+
+if (argv.csv) {
+  csvToJson(argv.csv);
 }
 //printing msg based on the argv statement/////
   prompt.override = argv;
@@ -23,5 +31,11 @@ if (argv.help){
 
 function printHelloMessage(name) {
   console.log('Hello ' + name);
-  process.stdout.write('Hello ' + name + ' Again!\n');
-}
+  var options = { encoding: 'utf8'};
+  // print the bigfile
+  var stream = fs.createReadStream('./app/bigfile');
+  stream.pipe(process.stdout);
+    process.stdout.write('Hello ' + name + ' Again!\n');
+    }
+
+
